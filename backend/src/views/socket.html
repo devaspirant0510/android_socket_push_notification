@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="/socket.io/socket.io.js"></script>
+<h1>Chat</h1>
+<div>
+
+</div>
+<form >
+    <input placeholder="입력하세요" required>
+    <button type="submit">
+        제출
+    </button>
+</form>
+
+<script>
+    const socket = io.connect("http://127.0.0.1:8080", {
+        path: "/socket.io",
+        transports: ['websocket']
+    });
+
+
+</script>
+</body>
+
+</html>
