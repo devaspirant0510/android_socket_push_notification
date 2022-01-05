@@ -13,6 +13,7 @@ router.post("/verify",async (req,res,next)=>{
         const result = jwt.verify(token,process.env.JWT_TOKEN)
         res.json(result);
     }catch(err){
+        next(err);
 
     }
 });

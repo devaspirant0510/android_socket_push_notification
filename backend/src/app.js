@@ -1,6 +1,7 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
 const http = require("http");
+const {failMsg} = require("./util/Result")
 require("dotenv").config();
 
 const router = require("./router");
@@ -25,6 +26,9 @@ sequelize.sync({force:false}).then(value => {
 }).catch(reason => {
     console.log(reason);
 });
+app.use((err,req,res,next)=>{
+    res.json(failMsg(200,"ERROR",err.toString()))
+})
 const server = http.createServer(app);
 server.listen(app.get("port"),()=>{
     console.log("server is open");
