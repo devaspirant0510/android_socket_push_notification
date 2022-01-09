@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable
+            name="viewmodel"
+            type="dev.seh.socketpushnoti.viewmodel.ChatViewModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -10,10 +13,11 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/chat_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            app:loadChat="@{viewmodel.chatData}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +32,7 @@
             app:layout_constraintEnd_toStartOf="@+id/appCompatButton3"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+            app:layout_constraintTop_toBottomOf="@+id/chat_list">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -43,7 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textInputLayout3"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+            app:layout_constraintTop_toBottomOf="@+id/chat_list" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,10 +11,9 @@ import com.google.gson.Gson
  * description :
  */
 object Util {
-    fun <T> convertLTMtoObject(data:Any,type:Any): T {
+    inline fun < reified T:Any> convertLTMtoObject(data:Any): T {
         val gson = Gson()
-        val json = gson.toJson(gson)
-        return gson.fromJson(json,type::class.java) as T
-
+        val json = gson.toJson(data)
+        return gson.fromJson(json,T::class.java) as T
     }
 }

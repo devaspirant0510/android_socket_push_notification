@@ -2,6 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <variable
+            name="chatData"
+            type="dev.seh.socketpushnoti.model.types.ChatData" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="30dp"
-                    android:text="채팅내용" />
+                    android:text="@{chatData.content}" />
 
             </androidx.cardview.widget.CardView>
 

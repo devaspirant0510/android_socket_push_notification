@@ -5,6 +5,7 @@ import dev.seh.socketpushnoti.model.api.User
 import dev.seh.socketpushnoti.model.types.RequestLoginType
 import dev.seh.socketpushnoti.model.types.RequestRegisterType
 import dev.seh.socketpushnoti.network.RetrofitService
+import dev.seh.socketpushnoti.util.Util
 import timber.log.Timber
 
 /**
@@ -47,9 +48,17 @@ class Repository {
                         RequestLoginType("lsh0510", "1234")
                     )
                     .data
+            val gson:Gson = Gson()
+/*
+
             val gson = Gson()
             val user = gson.toJson(data)
             return gson.fromJson(user, User::class.java) as User
+*/
+
+            val result:User = Util.convertLTMtoObject(data)
+            Timber.e(result.toString())
+            return result
         } catch (e: Exception) {
             Timber.e(e.message)
             return null
