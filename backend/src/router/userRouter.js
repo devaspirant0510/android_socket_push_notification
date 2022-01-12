@@ -11,7 +11,7 @@ router.post("/verify",async (req,res,next)=>{
     try{
         const {token} = req.body;
         const result = jwt.verify(token,process.env.JWT_TOKEN)
-        res.json(result);
+        res.json(successMsg(201,result));
     }catch(err){
         next(err);
     }
