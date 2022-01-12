@@ -5,11 +5,10 @@ function successMsg(code,msg){
         data:msg
     }
 }
-function failMsg(code,err,msg){
+function failMsg(code,msg){
     return {
         status:code,
         message:"ERROR",
-        errorCode:err,
         data:msg
     }
 }
