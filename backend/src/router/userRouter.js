@@ -14,7 +14,6 @@ router.post("/verify",async (req,res,next)=>{
         res.json(result);
     }catch(err){
         next(err);
-
     }
 });
 

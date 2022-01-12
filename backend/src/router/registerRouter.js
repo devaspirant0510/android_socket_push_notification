@@ -2,6 +2,7 @@ const express = require("express");
 const {User,Room,UserRoom,Chat} = require("../models");
 const {strConvertHash} = require("../util/utilLogic");
 const {v4} = require("uuid");
+const {successMsg} = require("../util/Result");
 
 const router = express.Router();
 
@@ -16,9 +17,11 @@ router.post("/",async(req,res,next)=>{
             userId,
             password:hashPwd
         });
-        res.json(addUser.toJSON());
+        console.log("회원 가입 성공",addUser.toJSON())
+        res.json(successMsg(201,addUser.toJSON()));
     }catch (err){
-        next(err);
+        console.log(err.toString())
+        next(err.toString());
     }
 });
 
