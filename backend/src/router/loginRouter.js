@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const jwtSetting = require("../config/jwtSecret");
 const jwtConfig = require("../util/jwtConfig");
 const Result = require("../util/Result");
+const {failMsg} = require("../util/Result");
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.post("/", async (req, res, next) => {
         const hashPwd = strConvertHash(password);
         const users = await User.findOne({where: {userId: userId, password: hashPwd}});
         if (users === null) {
-            res.json({message: "error"})
+            res.json(Result.failMsg(401,"해당 아이디 또는 비밀번호가 존재하지 않습니다."));
         } else {
             const user2json = users.toJSON();
             const token = jwtConfig.jwtSign({
@@ -27,12 +28,12 @@ router.post("/", async (req, res, next) => {
                 res.json(Result.successMsg(201, user2json));
             }
             else{
-                res.json(Result.failMsg(400,"jwt error",null))
+                res.json(Result.failMsg(400,"jwt error"))
             }
         }
     } catch (err) {
         console.log("err", err);
-        next(err);
+        next(err.toString());
     }
 });
 
