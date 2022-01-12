@@ -8,6 +8,7 @@ const router = require("./router");
 const {sequelize} = require("./models")
 const socketServer = require("./socket/socketIO");
 const SocketIO = require("socket.io");
+const morgan = require("morgan");
 
 const app = express();
 nunjucks.configure('src/views', {
@@ -18,6 +19,7 @@ app.set('view engine', 'html');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(morgan("dev"))
 app.set("port",process.env.PORT||8080);
 // api router
 app.use("/api",router);
