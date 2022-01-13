@@ -1,12 +1,12 @@
 package dev.seh.socketpushnoti.network;
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import dev.seh.socketpushnoti.model.api.JWTResult
+import dev.seh.socketpushnoti.model.api.User
 import dev.seh.socketpushnoti.model.types.RequestLoginType
 import dev.seh.socketpushnoti.model.types.RequestRegisterType
+import dev.seh.socketpushnoti.model.types.TokenType
 import dev.seh.socketpushnoti.util.Result
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -19,18 +19,18 @@ import retrofit2.http.Query
  * description :
  */
 interface ChatAPI {
-    @POST("/login")
+    @POST("/api/login")
     suspend fun requestLogin(
         @Body loginBody:RequestLoginType
-    ):Result.SuccessResult
+    ):Result.ApiResult<User>
 
-    @POST("/user/verify")
+    @POST("/api/user/verify")
     suspend fun requestVerifyUser(
-        @Query("token") token:String?=null,
-    ):Result.SuccessResult
+        @Body token:TokenType,
+    ):Result.ApiResult<JWTResult>
 
-    @POST("/register")
+    @POST("/api/register")
     suspend fun requestRegister(
         @Body registerBody:RequestRegisterType
-    ):Result.SuccessResult
+    ):Result.ApiResult<User>
 }

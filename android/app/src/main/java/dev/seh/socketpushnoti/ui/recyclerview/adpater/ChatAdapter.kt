@@ -18,19 +18,29 @@ import dev.seh.socketpushnoti.ui.recyclerview.viewholder.OtherChatViewHolder
  * email : seungho020510@gmail.com
  * description :
  */
-class ChatAdapter : RecyclerView.Adapter<OtherChatViewHolder>() {
+class ChatAdapter(private val socketId:String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val mList: MutableList<ChatData> = mutableListOf()
-    override fun onBindViewHolder(holder: OtherChatViewHolder, position: Int) {
-        holder.setData(mList[position])
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if(holder is OtherChatViewHolder){
+            holder.setData(mList[position])
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OtherChatViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return OtherChatViewHolder(parent)
     }
 
     override fun getItemCount(): Int = mList.size
 
+
     fun addItem(data: ChatData) {
         mList.add(data)
     }
+
+    companion object {
+        private const val OTHER:Int = 1
+        private const val MY:Int =2
+    }
+
 }

@@ -1,16 +1,16 @@
 package dev.seh.socketpushnoti.viewmodel;
 
+import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dev.seh.socketpushnoti.App
 import dev.seh.socketpushnoti.model.api.User
 import dev.seh.socketpushnoti.repository.Repository
+import dev.seh.socketpushnoti.service.SharedService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.math.log
 
 /**
  * @author : seungHo
@@ -20,8 +20,7 @@ import timber.log.Timber
  * email : seungho020510@gmail.com
  * description :
  */
-class MainViewModel : ViewModel() {
-    private val repository = Repository()
+class MainViewModel(private val repository: Repository) : AndroidViewModel(App.INSTANCE) {
 
     private val _userInfo = MutableLiveData<User>()
     val userInfo: LiveData<User>
@@ -31,9 +30,14 @@ class MainViewModel : ViewModel() {
     val inputLoginPwd = MutableLiveData<String>()
 
     val moveToChat = MutableLiveData<Boolean>()
+    val moveToRegister = MutableLiveData<Boolean>()
 
-    fun moveToChatAct(){
+    fun moveToChatAct() {
         moveToChat.value = true
+    }
+
+    fun moveToRegisterAct(){
+        moveToRegister.value = true
     }
 
     fun requestLogin() {
@@ -42,47 +46,49 @@ class MainViewModel : ViewModel() {
                 inputLoginId.value.toString(),
                 inputLoginPwd.value.toString()
             )
-            Timber.e(data.toString())
-            if(data!=null){
-                Timber.e("로그인 성공 ${data.toString()}")
-                _userInfo.postValue(data)
-                moveToChatAct()
+            if (data != null) {
+                data.token?.let {
+                    Timber.e("로그인 성공 ${data.toString()}")
+                    _userInfo.postValue(data)
+                    Timber.e(it)
+                    App.sharedPreference.saveStringData(SharedService.TOKEN, it)
+                    moveToChatAct()
+                }
 
-            }else{
+            } else {
                 return@launch
             }
         }
     }
-    fun requestRegister(){
+
+
+    private fun verifyUser() {
         viewModelScope.launch {
-            val data = repository.requestRegister()
-            Timber.e(data.toString())
+            try {
+                val token = App.sharedPreference.loadStringData(SharedService.TOKEN)
+                if (token.isNotEmpty()) {
+                    val user =
+                        repository.requestVerifyUser(token)
+                    Timber.e(user.toString())
+                    user?.let {
+                        _userInfo.value = user
+                        moveToChatAct()
 
-        }
-    }
-
-    private suspend fun verifyUser() {
-        try {
-            val user =
-                repository.requestVerifyUser("eyJhbGciOiJIUzI1NiIsInA5cCI6IkpXVCJ9.eyJuYW1lIjoiYWFhYWEiLCJpZCI6ImZiMjk0OWZjLTE5MTgtNGU0Zi1iM2Y3LTZmZGUwNTRjNTQwYiIsInVzZXJJZCI6ImxzaDAyMDUxMCIsImlhdCI6MTY0MTMwMTA4MiwiZXhwIjoxNjQyNTEwNjgyLCJpc3MiOiJpc3N1ZXIifQ.nqfK1D-UHtQmNQY4LwJwJ1FBOH-mnb5WnQogH-N2H7Y")
-            user?.let {
-                _userInfo.value = user
-                Toast.makeText(App.INSTANCE, user.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                    if (user == null) {
+                        Toast.makeText(App.INSTANCE, "JwtTokenError", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(App.INSTANCE, e.message.toString(), Toast.LENGTH_LONG).show()
+                Timber.d(e.message.toString())
             }
-            if (user == null) {
-                Toast.makeText(App.INSTANCE, "JwtTokenError", Toast.LENGTH_LONG).show()
-            }
-        } catch (e: Exception) {
-            Toast.makeText(App.INSTANCE, e.message.toString(), Toast.LENGTH_LONG).show()
-            Timber.d(e.message.toString())
         }
     }
 
     init {
         inputLoginId.value = ""
-        viewModelScope.launch {
-            verifyUser()
-        }
+        verifyUser()
 
     }
 }

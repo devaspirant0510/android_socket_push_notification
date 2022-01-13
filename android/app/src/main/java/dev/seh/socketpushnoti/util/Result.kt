@@ -1,15 +1,16 @@
 package dev.seh.socketpushnoti.util
 
 sealed class Result {
-    data class SuccessResult(
+    companion object {
+        const val OK = "OK"
+        const val ERROR = "ERROR"
+    }
+
+    data class ApiResult<T>(
+
         val status:Int,
         val message:String,
-        val data:Any
+        val data:T
     )
-    data class FailResult(
-        val status:Int,
-        val message:String,
-        val errorCode:Int,
-        val data:Any
-    )
+
 }

@@ -1,6 +1,7 @@
 package dev.seh.socketpushnoti;
 
 import android.app.Application
+import dev.seh.socketpushnoti.service.SharedService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,11 +19,14 @@ class App:Application() {
     companion object {
         lateinit var INSTANCE: App
             private set
+
+        lateinit var sharedPreference:SharedService
     }
 
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
+        sharedPreference = SharedService(this)
         CoroutineScope(Dispatchers.Default).launch {
             Timber.plant(Timber.DebugTree())
         }

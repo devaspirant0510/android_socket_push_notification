@@ -9,6 +9,7 @@ package dev.seh.socketpushnoti.model.types;
  * description :
  */
 data class ChatData(
+    var id:String,
     var user:String,
     var content:String,
 ) {

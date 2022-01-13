@@ -1,5 +1,7 @@
 package dev.seh.socketpushnoti.network;
 
+import io.socket.emitter.Emitter
+
 /**
  * @author : seungHo
  * @since : 2022-01-04
@@ -8,5 +10,9 @@ package dev.seh.socketpushnoti.network;
  * email : seungho020510@gmail.com
  * description :
  */
-public class SocketIOAPI {
+sealed class SocketIOAPI {
+    companion object {
+        const val ROOM_JOIN = "room-join"
+        const val CHAT = "chat"
+    }
 }

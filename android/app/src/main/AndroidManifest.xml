@@ -24,6 +24,9 @@
         </activity>
         <activity android:name=".ui.activity.ChatActivity"
             android:exported="true"/>
+        <activity android:name=".ui.activity.RegisterActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
