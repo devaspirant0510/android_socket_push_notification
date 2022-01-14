@@ -5,6 +5,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.*
 import dev.seh.socketpushnoti.R
 import dev.seh.socketpushnoti.base.BaseActivity
 import dev.seh.socketpushnoti.base.BaseViewModelFactory
@@ -12,6 +13,7 @@ import dev.seh.socketpushnoti.databinding.ActivityChatBinding
 import dev.seh.socketpushnoti.model.types.ChatData
 import dev.seh.socketpushnoti.network.SocketIOAPI
 import dev.seh.socketpushnoti.repository.Repository
+import dev.seh.socketpushnoti.service.WorkMangerEx
 import dev.seh.socketpushnoti.ui.recyclerview.adpater.ChatAdapter
 import dev.seh.socketpushnoti.viewmodel.ChatViewModel
 import dev.seh.socketpushnoti.viewmodel.MainViewModel
@@ -48,12 +50,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         name = intent.getStringExtra("name")!!
         id = intent.getStringExtra("id")!!
 
+
         Timber.e("${mainViewModel.userInfo.value.toString()}  a")
 
         mSocket = IO.socket("http://3.38.214.119:8080/chat")
         mSocket.connect()
         mSocket.on(Socket.EVENT_CONNECT, onConnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+
 
         mSocket.on(SocketIOAPI.ROOM_JOIN,Emitter.Listener{
             Timber.e("socket id :${it[0]}")
