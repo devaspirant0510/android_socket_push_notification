@@ -7,10 +7,11 @@
 <body>
 <script src="/socket.io/socket.io.js"></script>
 <h1>Chat</h1>
+<div>{{name}} 님 안녕하세요</div>
+<div>userid : {{userId}}</div>
 <div id="char-container">
 
 </div>
-<div>{{name}} 님 안녕하세요</div>
 <form >
     <input id="input" placeholder="입력하세요" required>
     <button id="submit" type="submit">
@@ -20,6 +21,7 @@
 
 <script>
     let userName = "{{name}}";
+    let userId = "{{userId}}";
 
     const charContainer = document.querySelector("#char-container");
     const submitButton = document.querySelector("#submit");
@@ -34,16 +36,18 @@
     socket.on("room-join",(msg)=>{
         console.log("room-join",msg)
         socketId = msg;
+        socket.emit("room-join-client",userId);
     })
-    socket.on("chat",(socketId,userName,content)=>{
+    socket.on("chat",(socketId,userName,content,userId)=>{
         const div = document.createElement("div");
         div.textContent = `${userName} : ${content}`;
-        console.log(socketId,userName,content);
+        console.log(socketId,userName,content,userId);
+        inputText.value = "";
         charContainer.appendChild(div);
     })
     submitButton.addEventListener("click",(e)=>{
         e.preventDefault();
-        socket.emit("chat",socketId,userName,inputText.value);
+        socket.emit("chat",socketId,userName,inputText.value,userId);
     })
 
 
